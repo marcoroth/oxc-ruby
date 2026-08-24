@@ -1,0 +1,21 @@
+# Generated from lib/oxc/minifier.rb with RBS::Inline
+
+module Oxc
+  class Minifier
+    attr_reader options: Hash[Symbol, untyped]
+
+    # : (?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> void
+    def initialize: (?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> void
+
+    # : (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::MinifyResult
+    def minify: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::MinifyResult
+
+    alias call minify
+
+    # : (?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::Minifier
+    def with: (?filename: String?, ?lang: String?, ?source_type: String?, ?compress: compress?, ?mangle: mangle?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::Minifier
+
+    # : () -> String
+    def inspect: () -> String
+  end
+end

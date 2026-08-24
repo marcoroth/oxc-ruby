@@ -1,0 +1,96 @@
+# Note: This file is hand written, `rbs-inline` does not generate this file.
+
+module Oxc
+  interface _Diagnosed
+    def diagnostics: () -> Array[Oxc::Diagnostic]
+  end
+
+  type targets = String | Symbol | Array[String | Symbol]
+
+  type keep_names = { ?function: bool, ?class: bool }
+
+  type compress = bool | {
+    ?target: targets,
+    ?drop_console: bool,
+    ?drop_debugger: bool,
+    ?unused: bool | String | Symbol,
+    ?keep_names: keep_names,
+    ?join_vars: bool,
+    ?sequences: bool,
+    ?drop_labels: Array[String],
+    ?max_iterations: Integer,
+    ?treeshake: treeshake
+  }
+
+  type treeshake = {
+    ?annotations: bool,
+    ?manual_pure_functions: Array[String],
+    ?property_read_side_effects: bool,
+    ?property_write_side_effects: bool,
+    ?unknown_global_side_effects: bool,
+    ?invalid_import_side_effects: bool
+  }
+
+  type mangle = bool | {
+    ?top_level: bool,
+    ?keep_names: bool | keep_names,
+    ?reserved: Array[String],
+    ?debug: bool
+  }
+
+  type codegen = bool | {
+    ?remove_whitespace: bool,
+    ?legal_comments: String | Symbol | { linked: String }
+  }
+
+  type minify = bool | {
+    ?filename: String,
+    ?lang: String | Symbol,
+    ?source_type: String | Symbol,
+    ?compress: compress,
+    ?mangle: mangle,
+    ?codegen: codegen,
+    ?sourcemap: bool
+  }
+
+  type jsx = bool | {
+    ?runtime: String | Symbol,
+    ?development: bool,
+    ?throw_if_namespace: bool,
+    ?pure: bool,
+    ?import_source: String,
+    ?pragma: String,
+    ?pragma_frag: String
+  }
+
+  type typescript = {
+    ?jsx_pragma: String,
+    ?jsx_pragma_frag: String,
+    ?only_remove_type_imports: bool,
+    ?allow_namespaces: bool,
+    ?allow_declare_fields: bool,
+    ?optimize_const_enums: bool,
+    ?optimize_enums: bool,
+    ?remove_class_fields_without_initializer: bool,
+    ?rewrite_import_extensions: String | Symbol,
+    ?declaration: bool | { ?strip_internal: bool }
+  }
+
+  type assumptions = {
+    ?ignore_function_length: bool,
+    ?no_document_all: bool,
+    ?object_rest_no_symbols: bool,
+    ?pure_getters: bool,
+    ?set_public_class_fields: bool
+  }
+
+  type decorator = {
+    ?legacy: bool,
+    ?emit_decorator_metadata: bool,
+    ?strict_null_checks: bool
+  }
+
+  type helpers = { ?mode: String | Symbol }
+
+  type inject = Hash[String, String | Array[String]]
+end

@@ -1,0 +1,31 @@
+# Generated from lib/oxc/errors.rb with RBS::Inline
+
+module Oxc
+  class Error < StandardError
+  end
+
+  class OptionError < Error
+  end
+
+  class EncodingError < Error
+  end
+
+  class TransformError < Error
+  end
+
+  class InternalError < Error
+  end
+
+  class PanicError < InternalError
+  end
+
+  class SyntaxError < Error
+    attr_reader result: (Oxc::Result | Oxc::ParseResult)?
+
+    # : (String, ?(Oxc::Result | Oxc::ParseResult)?) -> void
+    def initialize: (String, ?(Oxc::Result | Oxc::ParseResult)?) -> void
+
+    # : () -> Array[Oxc::Diagnostic]
+    def diagnostics: () -> Array[Oxc::Diagnostic]
+  end
+end

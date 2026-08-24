@@ -1,0 +1,23 @@
+# Generated from lib/oxc/diagnosed.rb with RBS::Inline
+
+module Oxc
+  # @rbs module-self _Diagnosed
+  module Diagnosed : _Diagnosed
+    @panicked: bool
+
+    # : () -> Array[Oxc::Diagnostic]
+    def errors: () -> Array[Oxc::Diagnostic]
+
+    # : () -> Array[Oxc::Diagnostic]
+    def warnings: () -> Array[Oxc::Diagnostic]
+
+    # : () -> bool
+    def errors?: () -> bool
+
+    # : () -> bool
+    def warnings?: () -> bool
+
+    # : () -> bool
+    def panicked?: () -> bool
+  end
+end

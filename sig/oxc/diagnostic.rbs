@@ -1,0 +1,57 @@
+# Generated from lib/oxc/diagnostic.rb with RBS::Inline
+
+module Oxc
+  class Diagnostic
+    ERROR: String
+
+    WARNING: String
+
+    attr_reader severity: String
+
+    attr_reader message: String
+
+    attr_reader labels: Array[Oxc::Label]
+
+    attr_reader help: String?
+
+    attr_reader codeframe: String?
+
+    # : (Hash[String, untyped]) -> Oxc::Diagnostic
+    def self.from_hash: (Hash[String, untyped]) -> Oxc::Diagnostic
+
+    # : (severity: String, message: String, labels: Array[Oxc::Label], ?help: String?, ?codeframe: String?) -> void
+    def initialize: (severity: String, message: String, labels: Array[Oxc::Label], ?help: String?, ?codeframe: String?) -> void
+
+    # : () -> bool
+    def error?: () -> bool
+
+    # : () -> bool
+    def warning?: () -> bool
+
+    # : () -> String
+    def to_s: () -> String
+
+    # : () -> String
+    def inspect: () -> String
+  end
+
+  class Label
+    attr_reader message: String?
+
+    attr_reader start: Integer
+
+    attr_reader finish: Integer
+
+    # : (Hash[String, untyped]) -> Oxc::Label
+    def self.from_hash: (Hash[String, untyped]) -> Oxc::Label
+
+    # : (start: Integer, finish: Integer, ?message: String?) -> void
+    def initialize: (start: Integer, finish: Integer, ?message: String?) -> void
+
+    # : (String) -> String?
+    def slice: (String) -> String?
+
+    # : () -> String
+    def inspect: () -> String
+  end
+end

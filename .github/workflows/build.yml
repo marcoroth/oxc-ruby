@@ -1,0 +1,74 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run Test
+        run: bundle exec rake test
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+      - name: Check sig/ matches the inline annotations
+        run: |
+          bundle exec rake rbs
+          git diff --exit-code sig/ || {
+            echo "::error::sig/ is out of date. Run: bundle exec rake rbs"
+            exit 1
+          }
+
+      - name: Install RBS collection
+        run: bundle exec rbs collection install
+
+      - name: Validate RBS
+        run: bundle exec rbs --repo .gem_rbs_collection -I sig validate
+
+      - name: Run Steep
+        run: bundle exec steep check
+
+      - name: Check formatting
+        run: cargo fmt --check
+        working-directory: rust
+
+      - name: Run Clippy
+        run: cargo clippy --release --all-targets -- -D warnings
+        working-directory: rust
+
+      - name: Run Rust tests
+        run: cargo test --release
+        working-directory: rust
+
+      - name: Check licenses
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          manifest-path: rust/Cargo.toml
+          command: check licenses

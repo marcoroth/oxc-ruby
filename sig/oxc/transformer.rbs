@@ -1,0 +1,21 @@
+# Generated from lib/oxc/transformer.rb with RBS::Inline
+
+module Oxc
+  class Transformer
+    attr_reader options: Hash[Symbol, untyped]
+
+    # : (?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> void
+    def initialize: (?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> void
+
+    # : (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::TransformResult
+    def transform: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::TransformResult
+
+    alias call transform
+
+    # : (?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::Transformer
+    def with: (?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::Transformer
+
+    # : () -> String
+    def inspect: () -> String
+  end
+end

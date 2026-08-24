@@ -1,0 +1,42 @@
+# Generated from lib/oxc/options.rb with RBS::Inline
+
+module Oxc
+  class Options
+    MINIFY: Array[Symbol]
+
+    TRANSFORM: Array[Symbol]
+
+    PARSE: Array[Symbol]
+
+    KNOWN: Array[Symbol]
+
+    RUBY_ONLY: Array[Symbol]
+
+    # TODO: support mangle_props. It needs `lazy-regex` and `rustc-hash` as direct dependencies of the
+    # Rust crate, because `oxc_minifier::ManglePropertiesOptions` types `include` and `exclude` as
+    # `lazy_regex::Regex` and `reserved` as `FxHashSet<CompactStr>`.
+    UNSUPPORTED: Array[Symbol]
+
+    attr_reader to_h: Hash[Symbol, untyped]
+
+    # : (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> String
+    def self.serialize: (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> String
+
+    # : (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> void
+    def initialize: (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> void
+
+    # : (?untyped) -> String
+    def to_json: (?untyped) -> String
+
+    # : () -> String
+    def inspect: () -> String
+
+    private
+
+    # : (Array[Symbol], Array[Symbol], String) -> void
+    def validate!: (Array[Symbol], Array[Symbol], String) -> void
+
+    # : (Hash[Symbol, untyped]) -> Hash[Symbol, untyped]
+    def normalize: (Hash[Symbol, untyped]) -> Hash[Symbol, untyped]
+  end
+end

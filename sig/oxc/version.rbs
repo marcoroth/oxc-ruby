@@ -1,0 +1,5 @@
+# Generated from lib/oxc/version.rb with RBS::Inline
+
+module Oxc
+  VERSION: ::String
+end

@@ -1,0 +1,61 @@
+# Generated from lib/oxc/parse_result.rb with RBS::Inline
+
+module Oxc
+  class ParseResult
+    include Diagnosed
+
+    attr_reader program: Hash[String, untyped]?
+
+    attr_reader module_record: Hash[String, untyped]?
+
+    attr_reader symbols: Hash[String, untyped]?
+
+    attr_reader comments: Array[Oxc::Comment]
+
+    attr_reader diagnostics: Array[Oxc::Diagnostic]
+
+    # : (String) -> Oxc::ParseResult
+    def self.from_json: (String) -> Oxc::ParseResult
+
+    # : (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
+    def initialize: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
+
+    # : () -> Oxc::ParseResult
+    def validate!: () -> Oxc::ParseResult
+
+    # : () -> String
+    def inspect: () -> String
+  end
+
+  class Comment
+    LINE: String
+
+    BLOCK: String
+
+    attr_reader type: String
+
+    attr_reader value: String
+
+    attr_reader start: Integer
+
+    attr_reader finish: Integer
+
+    # : (Hash[String, untyped]) -> Oxc::Comment
+    def self.from_hash: (Hash[String, untyped]) -> Oxc::Comment
+
+    # : (type: String, value: String, start: Integer, finish: Integer) -> void
+    def initialize: (type: String, value: String, start: Integer, finish: Integer) -> void
+
+    # : () -> bool
+    def line?: () -> bool
+
+    # : () -> bool
+    def block?: () -> bool
+
+    # : (String) -> String?
+    def slice: (String) -> String?
+
+    # : () -> String
+    def inspect: () -> String
+  end
+end

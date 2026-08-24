@@ -1,0 +1,32 @@
+/.bundle/
+/tmp/
+/pkg/
+/vendor/bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/spec/reports/
+
+# Types
+/.gem_rbs_collection/
+/.steep/
+
+# Rust
+/rust/target/
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+*.bundle
+*.dSYM/
+
+/ext/oxc/include/oxc.h
+/ext/oxc/Makefile
+/ext/oxc/mkmf.log
+/lib/oxc/oxc.bundle
+/lib/oxc/oxc.so
+
+# Built gems
+*.gem

@@ -1,0 +1,29 @@
+# Generated from lib/oxc/backend.rb with RBS::Inline
+
+module Oxc
+  module Backend
+    module Unavailable
+      # : (String, String) -> String
+      def minify: (String, String) -> String
+
+      # : (String, String) -> String
+      def transform: (String, String) -> String
+
+      # : (String, String) -> String
+      def parse: (String, String) -> String
+
+      # : () -> String
+      def version: () -> String
+
+      # : () -> String
+      def oxc_version: () -> String
+
+      private
+
+      # : (Symbol?) -> bot
+      def unavailable: (Symbol?) -> bot
+    end
+
+    extend Unavailable
+  end
+end

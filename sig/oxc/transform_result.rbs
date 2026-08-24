@@ -1,0 +1,22 @@
+# Generated from lib/oxc/transform_result.rb with RBS::Inline
+
+module Oxc
+  class TransformResult < Result
+    attr_reader declaration: String?
+
+    attr_reader declaration_map: String?
+
+    attr_reader helpers_used: Hash[String, String]
+
+    # : (String) -> Oxc::TransformResult
+    def self.from_json: (String) -> Oxc::TransformResult
+
+    # : (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?declaration: String?, ?declaration_map: String?, ?legal_comments: Array[String], ?helpers_used: Hash[String, String], ?panicked: bool) -> void
+    def initialize: (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?declaration: String?, ?declaration_map: String?, ?legal_comments: Array[String], ?helpers_used: Hash[String, String], ?panicked: bool) -> void
+
+    private
+
+    # : () -> Array[String]
+    def parts: () -> Array[String]
+  end
+end

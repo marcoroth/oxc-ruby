@@ -1,0 +1,32 @@
+[workspace]
+
+[package]
+name = "oxc-ruby-ffi"
+version = "0.0.1"
+edition = "2021"
+authors = ["Marco Roth <marco.roth@intergga.ch>"]
+description = "C FFI bindings for oxc, used by the oxc gem"
+license = "MIT"
+repository = "https://github.com/marcoroth/oxc-ruby"
+publish = false
+
+[lib]
+name = "oxc_ffi"
+path = "src/lib.rs"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+oxc = { version = "=0.147.0", features = ["full", "serialize"] }
+oxc_sourcemap = "8"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["raw_value"] }
+
+[build-dependencies]
+cbindgen = "0.28"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
+panic = "unwind"

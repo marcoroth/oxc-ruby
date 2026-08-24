@@ -1,0 +1,32 @@
+# Generated from lib/oxc/result.rb with RBS::Inline
+
+module Oxc
+  class Result
+    include Diagnosed
+
+    attr_reader code: String
+
+    attr_reader map: String?
+
+    attr_reader legal_comments: Array[String]
+
+    attr_reader diagnostics: Array[Oxc::Diagnostic]
+
+    # : (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
+    def initialize: (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
+
+    # : (?strict: untyped) -> self
+    def validate!: (?strict: untyped) -> self
+
+    # : () -> String
+    def to_s: () -> String
+
+    # : () -> String
+    def inspect: () -> String
+
+    private
+
+    # : () -> Array[String]
+    def parts: () -> Array[String]
+  end
+end

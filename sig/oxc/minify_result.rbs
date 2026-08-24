@@ -1,0 +1,11 @@
+# Generated from lib/oxc/minify_result.rb with RBS::Inline
+
+module Oxc
+  class MinifyResult < Result
+    # : (String) -> Oxc::MinifyResult
+    def self.from_json: (String) -> Oxc::MinifyResult
+
+    # : (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
+    def initialize: (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
+  end
+end
