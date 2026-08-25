@@ -65,12 +65,12 @@ if target_platform
 
   system("rustup target add #{target_platform}") || warn("oxc: Failed to add Rust target #{target_platform}")
 
-  cargo_args = "--release --target #{target_platform}"
+  cargo_args = "--release --locked --target #{target_platform}"
   lib_dir = File.join(target_dir, target_platform, "release")
 else
   puts "oxc: Compiling Rust library for native platform..."
 
-  cargo_args = "--release"
+  cargo_args = "--release --locked"
   lib_dir = File.join(target_dir, "release")
 end
 

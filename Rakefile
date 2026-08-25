@@ -54,7 +54,7 @@ begin
 
   desc "Build the Rust library for the native platform"
   task :cargo do
-    Dir.chdir("rust") { sh "cargo build --release" }
+    Dir.chdir("rust") { sh "cargo build --release --locked" }
 
     FileUtils.rm_f(Dir.glob("tmp/*/oxc/*/oxc.{bundle,so}"))
   end
@@ -95,7 +95,7 @@ begin
         RakeCompilerDock.sh(
           "rustup target add #{rust_target} 2>/dev/null; " \
           "export #{linker_env}; " \
-          "cd rust && cargo build --release --target #{rust_target} && cd .. && " \
+          "cd rust && cargo build --release --locked --target #{rust_target} && cd .. && " \
           "export RCD_PLATFORM=#{platform} && " \
           "bundle --local && rake native:#{platform} gem RUBY_CC_VERSION='#{ENV.fetch("RUBY_CC_VERSION", nil)}'",
           platform: platform,
