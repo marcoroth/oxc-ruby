@@ -19,6 +19,8 @@ require_relative "oxc/diagnosed"
 require_relative "oxc/result"
 require_relative "oxc/minify_result"
 require_relative "oxc/transform_result"
+require_relative "oxc/node"
+require_relative "oxc/visitor"
 require_relative "oxc/parse_result"
 require_relative "oxc/transformer"
 require_relative "oxc/minifier"
@@ -28,14 +30,14 @@ module Oxc
   def self.minify(source, **options)
     serialized = Options.serialize(options, Options::MINIFY, "minify")
 
-    MinifyResult.from_json(Backend.minify(source.to_s, serialized)).validate!(strict: options[:strict])
+    MinifyResult.from_json(Backend.minify(source.to_s, serialized)).validate!(strict: options[:strict] ? true : false)
   end
 
   #: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::TransformResult
   def self.transform(source, **options)
     serialized = Options.serialize(options, Options::TRANSFORM, "transform")
 
-    TransformResult.from_json(Backend.transform(source.to_s, serialized)).validate!(strict: options[:strict])
+    TransformResult.from_json(Backend.transform(source.to_s, serialized)).validate!(strict: options[:strict] ? true : false)
   end
 
   #: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?ast_type: String?, ?ast: bool, ?ranges: bool, ?preserve_parens: bool, ?comments: bool, ?module_record: bool, ?symbols: bool, ?semantic_errors: bool) -> Oxc::ParseResult

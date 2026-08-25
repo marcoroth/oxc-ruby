@@ -72,9 +72,9 @@ module Oxc
       freeze
     end
 
-    #: (?untyped) -> String
+    #: (?JSON::options?) -> String
     def to_json(state = nil)
-      JSON.generate(to_h, state)
+      state ? JSON.generate(to_h, state) : JSON.generate(to_h)
     end
 
     #: () -> String

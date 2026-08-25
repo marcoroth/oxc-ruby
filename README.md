@@ -205,6 +205,57 @@ Oxc.parse("let a; let a;", semantic_errors: true).errors.map(&:message)
 #=> ["Identifier `a` has already been declared"]
 ```
 
+#### Walking the AST
+
+`root` answers the program as an `Oxc::Node`, which walks, reads its fields by name, and knows what it sits inside.
+
+```ruby
+root = Oxc.parse(source).root
+
+root.type                 #=> "Program"
+root.every("Identifier")  #=> every identifier in the file
+root.at(offset)           #=> the innermost node covering a byte offset
+root.each                 #=> an Enumerator over every node
+```
+
+A field comes back as a node when it holds one, so reads chain.
+
+```ruby
+declaration = root.children.first
+
+declaration.kind
+#=> "let"
+
+declaration.declarations.first.id["name"]
+#=> "count"
+```
+
+`ancestors` is what a rewrite needs, since a reference sits inside the expression that has to be replaced.
+
+```ruby
+reference = root.at(source.index("count +="))
+reference.ancestors.find { |node| node.type == "AssignmentExpression" }.slice(source)
+#=> "count += 1"
+```
+
+`Oxc::Visitor` answers a node with the method named after its type, and walks through anything nothing answers.
+
+```ruby
+class Reads < Oxc::Visitor
+  def visit_assignment_expression(node)
+    puts "#{node.left["name"]} #{node.operator}"
+
+    visit_children(node)
+  end
+end
+
+Reads.new.visit(Oxc.parse(source))
+```
+
+It takes a parse result or a node, so the common case needs no `root`. A result with no AST is nothing to walk and visits nothing.
+
+There is one node class, not one per type, so a type the gem has never seen still walks and still answers. The types and their fields are [ESTree](https://github.com/estree/estree). For the TypeScript and JSX nodes, which ESTree does not cover, oxc publishes the exact shapes it emits as [`@oxc-project/types`](https://www.npmjs.com/package/@oxc-project/types).
+
 #### What a file declared, and what it only used
 
 `symbols: true` answers every binding with the span it was declared at and the spans of every reference to it, plus the names the file used without declaring.
