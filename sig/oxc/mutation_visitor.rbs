@@ -1,0 +1,80 @@
+# Generated from lib/oxc/mutation_visitor.rb with RBS::Inline
+
+module Oxc
+  # A visitor that rewrites the source it walked, by recording what to do to a node and splicing the
+  # original text at the end. Everything nothing touched survives byte for byte.
+  #
+  #     class Renamer < Oxc::MutationVisitor
+  #       def visit_identifier(node)
+  #         replace(node, "renamed") if node["name"] == "count"
+  #       end
+  #     end
+  #
+  #     Renamer.new.rewrite("let count = 1")  #=> "let renamed = 1"
+  class MutationVisitor < Visitor
+    class Overlap < StandardError
+    end
+
+    class Invalid < Error
+    end
+
+    class Edit < Data
+      attr_reader start(): Integer
+
+      attr_reader finish(): Integer
+
+      attr_reader text(): String
+
+      attr_reader order(): Integer
+
+      def self.new: (Integer start, Integer finish, String text, Integer order) -> instance
+                  | (start: Integer, finish: Integer, text: String, order: Integer) -> instance
+
+      def self.members: () -> [ :start, :finish, :text, :order ]
+
+      def members: () -> [ :start, :finish, :text, :order ]
+    end
+
+    attr_reader source: String
+
+    attr_reader parsed: Oxc::ParseResult
+
+    # : (String, ?verify: bool, **untyped) -> String
+    def rewrite: (String, ?verify: bool, **untyped) -> String
+
+    # : (Oxc::Node, String) -> void
+    def replace: (Oxc::Node, String) -> void
+
+    # : (Oxc::Node) -> void
+    def remove: (Oxc::Node) -> void
+
+    # : (Oxc::Node, String) -> void
+    def insert_before: (Oxc::Node, String) -> void
+
+    # : (Oxc::Node, String) -> void
+    def insert_after: (Oxc::Node, String) -> void
+
+    # : (Oxc::Node, String, String) -> void
+    def wrap: (Oxc::Node, String, String) -> void
+
+    # : (Oxc::Node) -> void
+    def visit_children: (Oxc::Node) -> void
+
+    private
+
+    # : (String, Hash[Symbol, untyped]) -> String
+    def verified: (String, Hash[Symbol, untyped]) -> String
+
+    # : (Oxc::Node) -> bool
+    def replaced?: (Oxc::Node) -> bool
+
+    # : (Integer, Integer, String) -> void
+    def edit: (Integer, Integer, String) -> void
+
+    # : (Edit, Integer, Integer) -> bool
+    def overlaps?: (Edit, Integer, Integer) -> bool
+
+    # : () -> String
+    def apply: () -> String
+  end
+end
