@@ -256,6 +256,51 @@ It takes a parse result or a node, so the common case needs no `root`. A result 
 
 There is one node class, not one per type, so a type the gem has never seen still walks and still answers. The types and their fields are [ESTree](https://github.com/estree/estree). For the TypeScript and JSX nodes, which ESTree does not cover, oxc publishes the exact shapes it emits as [`@oxc-project/types`](https://www.npmjs.com/package/@oxc-project/types).
 
+#### Rewriting
+
+`Oxc::MutationVisitor` records what to do to a node and splices the original text at the end, so everything it did not touch survives byte for byte, comments and indentation included.
+
+```ruby
+class Renamer < Oxc::MutationVisitor
+  def visit_identifier(node)
+    replace(node, "renamed") if node["name"] == "count"
+  end
+end
+
+Renamer.new.rewrite("let count = 1 // keep me")
+#=> "let renamed = 1 // keep me"
+```
+
+`replace`, `remove`, `insert_before`, `insert_after` and `wrap` are the operations, and each takes a node. Spans are exact, so removing `debugger;` removes what the node covered and leaves the newline after it alone.
+
+Walking into a node that was replaced would edit text that is no longer there, so it stops. Two edits over the same span raise `Oxc::MutationVisitor::Overlap` instead of quietly producing something broken.
+
+What goes in is text, so a node can become anything, including several statements or nothing at all. Nothing checks it on the way, so the result is read back afterwards and refused if it stopped being JavaScript.
+
+```ruby
+Breaker.new.rewrite("foo(data)")
+#=> Oxc::MutationVisitor::Invalid: what was rewritten no longer reads as JavaScript: Unexpected token
+```
+
+Pass `verify: false` for a fragment that was never going to parse on its own.
+
+`parsed` reaches what the source parsed to, so a rewrite can ask for symbols and drive from them. That is the difference between rewriting a name and rewriting the right one.
+
+```ruby
+class ToState < Oxc::MutationVisitor
+  def rewrite(source) = super(source, symbols: true)
+
+  def visit_identifier(node)
+    reference = parsed.symbols.fetch("declared").flat_map { |symbol| symbol["references"] }
+      .find { |found| found["start"] == node.start }
+
+    replace(node, %(state.get("#{node["name"]}"))) if reference && !reference["write"]
+  end
+end
+```
+
+Drive from references, not from every `Identifier`. That is what keeps a declaration, a shadowed local, and a same-named property out of the rewrite.
+
 #### What a file declared, and what it only used
 
 `symbols: true` answers every binding with the span it was declared at and the spans of every reference to it, plus the names the file used without declaring.
