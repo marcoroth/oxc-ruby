@@ -46,7 +46,18 @@ module Oxc
       :semantic_errors
     ].freeze #: Array[Symbol]
 
-    KNOWN = (MINIFY | TRANSFORM | PARSE).freeze #: Array[Symbol]
+    SCOPE = [
+      :filename,
+      :lang,
+      :source_type,
+      :scope,
+      :separator,
+      :codegen,
+      :sourcemap,
+      :strict
+    ].freeze #: Array[Symbol]
+
+    KNOWN = (MINIFY | TRANSFORM | PARSE | SCOPE).freeze #: Array[Symbol]
     RUBY_ONLY = [:strict].freeze #: Array[Symbol]
 
     # TODO: support mangle_props. It needs `lazy-regex` and `rustc-hash` as direct dependencies of the

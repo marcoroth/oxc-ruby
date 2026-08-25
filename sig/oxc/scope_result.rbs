@@ -1,0 +1,18 @@
+# Generated from lib/oxc/scope_result.rb with RBS::Inline
+
+module Oxc
+  class ScopeResult < Result
+    attr_reader renamed: Hash[String, String]
+
+    # : (String) -> Oxc::ScopeResult
+    def self.from_json: (String) -> Oxc::ScopeResult
+
+    # : (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?renamed: Hash[String, String], ?legal_comments: Array[String], ?panicked: bool) -> void
+    def initialize: (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?renamed: Hash[String, String], ?legal_comments: Array[String], ?panicked: bool) -> void
+
+    private
+
+    # : () -> Array[String]
+    def parts: () -> Array[String]
+  end
+end

@@ -18,6 +18,11 @@ module Oxc
         unavailable(__method__)
       end
 
+      #: (String, String) -> String
+      def scope(_source, _options_json)
+        unavailable(__method__)
+      end
+
       #: () -> String
       def version
         unavailable(__method__)

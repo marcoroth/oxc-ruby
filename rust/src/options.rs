@@ -742,3 +742,57 @@ impl ParseOptions {
     }
   }
 }
+
+#[derive(Debug, Deserialize)]
+#[serde(default, deny_unknown_fields)]
+pub struct ScopeOptions {
+  pub filename: Option<String>,
+  pub lang: Option<String>,
+  pub source_type: Option<String>,
+  pub scope: String,
+  pub separator: String,
+  pub codegen: Option<CodegenOptions>,
+  pub sourcemap: bool,
+}
+
+impl Default for ScopeOptions {
+  fn default() -> Self {
+    Self {
+      filename: None,
+      lang: None,
+      source_type: None,
+      scope: String::new(),
+      separator: "_".to_string(),
+      codegen: None,
+      sourcemap: false,
+    }
+  }
+}
+
+impl ScopeOptions {
+  pub fn suffix(&self) -> Result<&str, String> {
+    if self.scope.is_empty() {
+      return Err("scope has to be given, and has to read as part of a JavaScript name.".to_string());
+    }
+
+    if !self
+      .scope
+      .chars()
+      .all(|character| character.is_ascii_alphanumeric() || character == '_' || character == '$')
+    {
+      return Err(format!(
+        "Invalid scope {:?}. It has to read as part of a JavaScript name, so letters, digits, _ and $ only.",
+        self.scope
+      ));
+    }
+
+    Ok(&self.scope)
+  }
+
+  pub fn to_codegen_options(&self) -> Result<OxcCodegenOptions, String> {
+    match &self.codegen {
+      Some(codegen) => codegen.to_codegen_options(),
+      None => Ok(OxcCodegenOptions::default()),
+    }
+  }
+}

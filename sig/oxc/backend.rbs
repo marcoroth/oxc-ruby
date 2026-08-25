@@ -12,6 +12,9 @@ module Oxc
       # : (String, String) -> String
       def parse: (String, String) -> String
 
+      # : (String, String) -> String
+      def scope: (String, String) -> String
+
       # : () -> String
       def version: () -> String
 

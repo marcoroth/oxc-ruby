@@ -7,6 +7,9 @@ module Oxc
   # : (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::TransformResult
   def self.transform: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?cwd: String?, ?target: targets?, ?jsx: jsx?, ?typescript: typescript?, ?assumptions: assumptions?, ?decorator: decorator?, ?helpers: helpers?, ?define: Hash[String, String]?, ?inject: inject?, ?minify: minify?, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::TransformResult
 
+  # : (String, scope: String, ?filename: String?, ?lang: String?, ?source_type: String?, ?separator: String, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::ScopeResult
+  def self.scope: (String, scope: String, ?filename: String?, ?lang: String?, ?source_type: String?, ?separator: String, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::ScopeResult
+
   # : (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?ast_type: String?, ?ast: bool, ?ranges: bool, ?preserve_parens: bool, ?comments: bool, ?module_record: bool, ?symbols: bool, ?semantic_errors: bool) -> Oxc::ParseResult
   def self.parse: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?ast_type: String?, ?ast: bool, ?ranges: bool, ?preserve_parens: bool, ?comments: bool, ?module_record: bool, ?symbols: bool, ?semantic_errors: bool) -> Oxc::ParseResult
 

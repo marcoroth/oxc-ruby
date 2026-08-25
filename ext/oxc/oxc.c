@@ -99,6 +99,12 @@ static VALUE rb_transform(VALUE self, VALUE source, VALUE options) {
   return call(oxc_transform, source, options);
 }
 
+static VALUE rb_scope(VALUE self, VALUE source, VALUE options) {
+  (void) self;
+
+  return call(oxc_scope, source, options);
+}
+
 static VALUE rb_parse(VALUE self, VALUE source, VALUE options) {
   (void) self;
 
@@ -131,6 +137,7 @@ void Init_oxc(void) {
   rb_define_singleton_method(rb_mBackend, "minify", rb_minify, 2);
   rb_define_singleton_method(rb_mBackend, "transform", rb_transform, 2);
   rb_define_singleton_method(rb_mBackend, "parse", rb_parse, 2);
+  rb_define_singleton_method(rb_mBackend, "scope", rb_scope, 2);
   rb_define_singleton_method(rb_mBackend, "version", rb_native_version, 0);
   rb_define_singleton_method(rb_mBackend, "oxc_version", rb_oxc_version, 0);
 }

@@ -19,6 +19,7 @@ require_relative "oxc/diagnosed"
 require_relative "oxc/result"
 require_relative "oxc/minify_result"
 require_relative "oxc/transform_result"
+require_relative "oxc/scope_result"
 require_relative "oxc/parse_result"
 require_relative "oxc/transformer"
 require_relative "oxc/minifier"
@@ -36,6 +37,13 @@ module Oxc
     serialized = Options.serialize(options, Options::TRANSFORM, "transform")
 
     TransformResult.from_json(Backend.transform(source.to_s, serialized)).validate!(strict: options[:strict])
+  end
+
+  #: (String, scope: String, ?filename: String?, ?lang: String?, ?source_type: String?, ?separator: String, ?codegen: codegen?, ?sourcemap: bool, ?strict: bool) -> Oxc::ScopeResult
+  def self.scope(source, **options)
+    serialized = Options.serialize(options, Options::SCOPE, "scope")
+
+    ScopeResult.from_json(Backend.scope(source.to_s, serialized)).validate!(strict: options[:strict])
   end
 
   #: (String, ?filename: String?, ?lang: String?, ?source_type: String?, ?ast_type: String?, ?ast: bool, ?ranges: bool, ?preserve_parens: bool, ?comments: bool, ?module_record: bool, ?symbols: bool, ?semantic_errors: bool) -> Oxc::ParseResult

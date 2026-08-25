@@ -205,6 +205,24 @@ Oxc.parse("let a; let a;", semantic_errors: true).errors.map(&:message)
 #=> ["Identifier `a` has already been declared"]
 ```
 
+#### Scoping
+
+`scope` renames everything a file declared at the top level, so two copies of the same script on one page never collide. Every reference to a renamed name follows it, and a name the file did not declare is left alone.
+
+```ruby
+result = Oxc.scope(source, scope: "1a2b3c4d")
+
+result.code
+#=> "let count_1a2b3c4d = 0;\nfunction bump_1a2b3c4d() { count_1a2b3c4d += 1; render(label) }\n"
+
+result.renamed
+#=> {"bump" => "bump_1a2b3c4d", "count" => "count_1a2b3c4d"}
+```
+
+`renamed` says what each name became, so whatever wired the old names up can find the new ones. `separator` reads a character of your own, `_` by default.
+
+A name declared inside a function keeps its own name, since nothing outside can see it, and a global the file only used stays untouched.
+
 #### What a file declared, and what it only used
 
 `symbols: true` answers every binding with the span it was declared at and the spans of every reference to it, plus the names the file used without declaring.
@@ -307,6 +325,8 @@ They are separate objects because they read separate options. `minify` reads `co
 | `minify`     | `bool`, `Hash`    | Whether to minify in the same pass, and how.                       |
 | `cwd`        | `String`          | What relative paths in other options are relative to.              |
 
+`scope` reads `scope`, `separator`, `codegen` and `sourcemap`, alongside `filename`, `lang` and `source_type`.
+
 An option nobody reads is refused, and so is one inside a nested hash:
 
 ```ruby
@@ -323,9 +343,10 @@ Each call answers its own result, so no result carries a field the call that pro
 
 * `Oxc.minify` answers an `Oxc::MinifyResult`
 * `Oxc.transform` answers an `Oxc::TransformResult`
+* `Oxc.scope` answers an `Oxc::ScopeResult`
 * `Oxc.parse` answers an `Oxc::ParseResult`
 
-`Oxc::MinifyResult` and `Oxc::TransformResult` are both an `Oxc::Result`, so anything reading `code` or `to_s` takes either one. `Oxc::ParseResult` stands on its own, because a parse answers a tree and has no code to print.
+`Oxc::MinifyResult`, `Oxc::TransformResult` and `Oxc::ScopeResult` are all an `Oxc::Result`, so anything reading `code` or `to_s` takes any of them. `Oxc::ParseResult` stands on its own, because a parse answers a tree and has no code to print.
 
 #### What every result answers
 

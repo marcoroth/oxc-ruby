@@ -8,6 +8,8 @@ module Oxc
 
     PARSE: Array[Symbol]
 
+    SCOPE: Array[Symbol]
+
     KNOWN: Array[Symbol]
 
     RUBY_ONLY: Array[Symbol]

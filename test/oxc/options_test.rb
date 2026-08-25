@@ -51,6 +51,12 @@ module Oxc
       assert_equal expected, Options::PARSE
     end
 
+    test "knows what scope reads" do
+      expected = [:filename, :lang, :source_type, :scope, :separator, :codegen, :sourcemap, :strict]
+
+      assert_equal expected, Options::SCOPE
+    end
+
     test "knows what transform reads" do
       expected = [
         :filename, :lang, :source_type, :cwd, :target, :jsx, :typescript, :assumptions, :decorator, :helpers,
@@ -64,7 +70,7 @@ module Oxc
       expected = [
         :filename, :lang, :source_type, :compress, :mangle, :codegen, :sourcemap, :strict, :cwd, :target, :jsx,
         :typescript, :assumptions, :decorator, :helpers, :define, :inject, :minify, :ast_type, :ast, :ranges,
-        :preserve_parens, :comments, :module_record, :symbols, :semantic_errors
+        :preserve_parens, :comments, :module_record, :symbols, :semantic_errors, :scope, :separator
       ]
 
       assert_equal expected, Options::KNOWN

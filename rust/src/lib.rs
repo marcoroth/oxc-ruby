@@ -13,6 +13,7 @@ mod module_record;
 mod options;
 mod parse;
 mod result;
+mod scope;
 mod source_type;
 mod symbols;
 mod transform;
@@ -31,9 +32,10 @@ use oxc::CompilerInterface;
 use serde::de::DeserializeOwned;
 
 use crate::diagnostic::Diagnostic;
-use crate::options::{MinifyOptions, ParseOptions, TransformOptions};
+use crate::options::{MinifyOptions, ParseOptions, ScopeOptions, TransformOptions};
 use crate::parse::parse_source;
 use crate::result::{MinifyPayload, TransformPayload};
+use crate::scope::scope_source;
 use crate::source_type::source_type_for;
 use crate::transform::Compiler;
 
@@ -231,6 +233,16 @@ fn transform_source(source: &str, options: &TransformOptions) -> Result<Transfor
     helpers_used: compiler.helpers_used,
     errors: Diagnostic::from_diagnostics(&filename, source, compiler.errors),
     panicked,
+  })
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn oxc_scope(source: *const c_char, options_json: *const c_char) -> OxcResult {
+  guard(|| {
+    let source = borrow_str(source, "source")?;
+    let options = borrow_options::<ScopeOptions>(options_json)?;
+
+    scope_source(source, &options).map_err(Failure::option)
   })
 }
 
