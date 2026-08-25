@@ -36,6 +36,11 @@ module Oxc
       freeze
     end
 
+    #: () -> Oxc::Node?
+    def root
+      program ? Node.new(program) : nil
+    end
+
     #: () -> Oxc::ParseResult
     def validate!
       return self unless errors? || panicked?
@@ -46,7 +51,9 @@ module Oxc
     #: () -> String
     def inspect
       parts = [] #: Array[String]
-      parts << "program=#{program["type"]}" if program
+      parts << "#{root&.type} #{root&.start}..#{root&.finish}" if program
+      parts << "module_record" if module_record
+      parts << "symbols=#{symbols.fetch("declared").length}" if symbols
       parts << "comments=#{comments.length}" unless comments.empty?
       parts << "diagnostics=#{diagnostics.length}" unless diagnostics.empty?
 

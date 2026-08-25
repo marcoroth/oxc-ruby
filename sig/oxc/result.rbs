@@ -15,8 +15,8 @@ module Oxc
     # : (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
     def initialize: (code: String, diagnostics: Array[Oxc::Diagnostic], ?map: String?, ?legal_comments: Array[String], ?panicked: bool) -> void
 
-    # : (?strict: untyped) -> self
-    def validate!: (?strict: untyped) -> self
+    # : (?strict: bool?) -> self
+    def validate!: (?strict: bool?) -> self
 
     # : () -> String
     def to_s: () -> String

@@ -117,8 +117,9 @@ module Oxc
     end
 
     test "prints what it read" do
-      assert_equal "#<Oxc::ParseResult program=Program>", Oxc.parse("foo()").inspect
+      assert_equal "#<Oxc::ParseResult Program 0..5>", Oxc.parse("foo()").inspect
       assert_equal "#<Oxc::ParseResult>", Oxc.parse("foo()", ast: false).inspect
+      assert_equal "#<Oxc::ParseResult Program 0..5 symbols=0>", Oxc.parse("foo()", symbols: true).inspect
     end
 
     test "refuses an ast type it cannot read" do

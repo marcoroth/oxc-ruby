@@ -25,8 +25,8 @@ module Oxc
     # : (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> void
     def initialize: (Hash[Symbol, untyped], ?Array[Symbol], ?String) -> void
 
-    # : (?untyped) -> String
-    def to_json: (?untyped) -> String
+    # : (?JSON::options?) -> String
+    def to_json: (?JSON::options?) -> String
 
     # : () -> String
     def inspect: () -> String

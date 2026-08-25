@@ -1,0 +1,74 @@
+# Generated from lib/oxc/node.rb with RBS::Inline
+
+module Oxc
+  class Node
+    include Enumerable[Oxc::Node]
+
+    ACRONYM: Regexp
+
+    BOUNDARY: Regexp
+
+    SPAN: Array[String]
+
+    SCALARS: Integer
+
+    attr_reader attributes: Hash[String, untyped]
+
+    attr_reader parent: Oxc::Node?
+
+    # : (Hash[String, untyped], ?Oxc::Node?) -> void
+    def initialize: (Hash[String, untyped], ?Oxc::Node?) -> void
+
+    # : () -> String
+    def type: () -> String
+
+    # : () -> Integer
+    def start: () -> Integer
+
+    # : () -> Integer
+    def finish: () -> Integer
+
+    # : () -> String
+    def name: () -> String
+
+    # : (String) -> untyped
+    def []: (String) -> untyped
+
+    # : (String) -> String?
+    def slice: (String) -> String?
+
+    # : () -> Array[Oxc::Node]
+    def children: () -> Array[Oxc::Node]
+
+    # : () { (Oxc::Node) -> void } -> void
+    # : () -> Enumerator[Oxc::Node, void]
+    def each: () { (Oxc::Node) -> void } -> void
+            | () -> Enumerator[Oxc::Node, void]
+
+    # : () -> Array[Oxc::Node]
+    def ancestors: () -> Array[Oxc::Node]
+
+    # : (Integer) -> Oxc::Node?
+    def at: (Integer) -> Oxc::Node?
+
+    # : (String) -> Array[Oxc::Node]
+    def every: (String) -> Array[Oxc::Node]
+
+    # : () -> Hash[String, untyped]
+    def scalars: () -> Hash[String, untyped]
+
+    # : () -> String
+    def inspect: () -> String
+
+    # : (Symbol, *untyped) -> untyped
+    def method_missing: (Symbol, *untyped) -> untyped
+
+    # : (Symbol, ?bool) -> bool
+    def respond_to_missing?: (Symbol, ?bool) -> bool
+
+    private
+
+    # : (untyped) -> untyped
+    def wrap: (untyped) -> untyped
+  end
+end

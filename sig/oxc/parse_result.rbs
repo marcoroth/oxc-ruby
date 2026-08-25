@@ -20,6 +20,9 @@ module Oxc
     # : (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
     def initialize: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
 
+    # : () -> Oxc::Node?
+    def root: () -> Oxc::Node?
+
     # : () -> Oxc::ParseResult
     def validate!: () -> Oxc::ParseResult
 

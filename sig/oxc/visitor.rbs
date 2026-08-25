@@ -1,0 +1,11 @@
+# Generated from lib/oxc/visitor.rb with RBS::Inline
+
+module Oxc
+  class Visitor
+    # : (Oxc::Node | Oxc::ParseResult) -> void
+    def visit: (Oxc::Node | Oxc::ParseResult) -> void
+
+    # : (Oxc::Node) -> void
+    def visit_children: (Oxc::Node) -> void
+  end
+end

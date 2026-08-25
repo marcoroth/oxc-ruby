@@ -18,7 +18,7 @@ module Oxc
       @panicked = panicked
     end
 
-    #: (?strict: untyped) -> self
+    #: (?strict: bool?) -> self
     def validate!(strict: false)
       return self unless errors? || panicked?
       return self unless strict || panicked? || code.empty?
