@@ -60,11 +60,11 @@ jobs:
         working-directory: rust
 
       - name: Run Clippy
-        run: cargo clippy --release --all-targets -- -D warnings
+        run: cargo clippy --release --locked --all-targets -- -D warnings
         working-directory: rust
 
       - name: Run Rust tests
-        run: cargo test --release
+        run: cargo test --release --locked
         working-directory: rust
 
       - name: Check licenses
