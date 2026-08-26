@@ -213,21 +213,32 @@ Oxc.parse("let a; let a;", semantic_errors: true).errors.map(&:message)
 root = Oxc.parse(source).root
 
 root.type                 #=> "Program"
+root.child_nodes          #=> the nodes directly under it
 root.every("Identifier")  #=> every identifier in the file
 root.at(offset)           #=> the innermost node covering a byte offset
 root.each                 #=> an Enumerator over every node
 ```
 
+An ESTree field always wins over a method of the gem's own, since `name`, `attributes` and `children` are all real fields. `Identifier#name` is the identifier's name, `JSXElement#children` is what the element wraps, and `ImportDeclaration#attributes` is the import's `with` clause. The walker spells its own versions `underscored_type`, `to_h` and `child_nodes`, which no ESTree field can be called.
+
 A field comes back as a node when it holds one, so reads chain.
 
 ```ruby
-declaration = root.children.first
+declaration = root.child_nodes.first
 
 declaration.kind
 #=> "let"
 
-declaration.declarations.first.id["name"]
+declaration.declarations.first.id.name
 #=> "count"
+```
+
+ESTree names its fields in camelCase, and a field answers to its snake_case name too, so reading an AST does not mean writing JavaScript casing in Ruby.
+
+```ruby
+node.type_annotation   # the same field as node.typeAnnotation
+node.super_class       # superClass
+root.source_type       # sourceType
 ```
 
 `ancestors` is what a rewrite needs, since a reference sits inside the expression that has to be replaced.

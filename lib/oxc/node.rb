@@ -9,8 +9,13 @@ module Oxc
     SPAN = ["type", "start", "end"].freeze #: Array[String]
     SCALARS = 3 #: Integer
 
-    attr_reader :attributes #: Hash[String, untyped]
     attr_reader :parent #: Oxc::Node?
+
+    protected
+
+    attr_reader :attributes #: Hash[String, untyped]
+
+    public
 
     #: (Hash[String, untyped], ?Oxc::Node?) -> void
     def initialize(attributes, parent = nil)
@@ -34,13 +39,18 @@ module Oxc
     end
 
     #: () -> String
-    def name
-      @name ||= type.gsub(ACRONYM, '\1_\2').gsub(BOUNDARY, '\1_\2').downcase
+    def underscored_type
+      @underscored_type ||= type.gsub(ACRONYM, '\1_\2').gsub(BOUNDARY, '\1_\2').downcase
     end
 
     #: (String) -> untyped
     def [](key)
       attributes[key]
+    end
+
+    #: () -> Hash[String, untyped]
+    def to_h
+      attributes
     end
 
     #: (String) -> String?
@@ -49,12 +59,12 @@ module Oxc
     end
 
     #: () -> Array[Oxc::Node]
-    def children
-      @children ||= attributes.each_value
-                              .flat_map { |value| value.is_a?(Array) ? value : [value] }
-                              .select { |value| value.is_a?(Hash) && value.key?("type") }
-                              .map { |value| Node.new(value, self) }
-                              .freeze
+    def child_nodes
+      @child_nodes ||= attributes.each_value
+                                 .flat_map { |value| value.is_a?(Array) ? value : [value] }
+                                 .select { |value| value.is_a?(Hash) && value.key?("type") }
+                                 .map { |value| Node.new(value, self) }
+                                 .freeze
     end
 
     #: () { (Oxc::Node) -> void } -> void
@@ -64,7 +74,7 @@ module Oxc
 
       yield self
 
-      children.each { |child| child.each(&) }
+      child_nodes.each { |child| child.each(&) }
     end
 
     #: () -> Array[Oxc::Node]
@@ -99,19 +109,28 @@ module Oxc
 
     #: (Symbol, *untyped) -> untyped
     def method_missing(name, *arguments)
-      key = name.to_s
+      key = field_for(name.to_s)
 
-      return super unless attributes.key?(key)
+      return super unless key
 
       wrap(attributes[key])
     end
 
     #: (Symbol, ?bool) -> bool
     def respond_to_missing?(name, include_private = false)
-      attributes.key?(name.to_s) || super
+      !field_for(name.to_s).nil? || super
     end
 
     private
+
+    #: (String) -> String?
+    def field_for(name)
+      return name if attributes.key?(name)
+
+      camelized = name.gsub(/_([a-z\d])/) { Regexp.last_match(1).to_s.upcase }
+
+      camelized if attributes.key?(camelized)
+    end
 
     #: (untyped) -> untyped
     def wrap(value)
