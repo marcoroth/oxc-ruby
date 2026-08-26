@@ -45,7 +45,7 @@ module Oxc
   def self.parse(source, **options)
     serialized = Options.serialize(options, Options::PARSE, "parse")
 
-    ParseResult.from_json(Backend.parse(source.to_s, serialized))
+    ParseResult.from_json(Backend.parse(source.to_s, serialized), source.to_s)
   end
 
   #: () -> String

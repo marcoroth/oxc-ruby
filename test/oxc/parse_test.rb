@@ -116,10 +116,19 @@ module Oxc
       assert_predicate parsed.diagnostics, :frozen?
     end
 
+    test "keeps the source it read" do
+      assert_equal "foo()", Oxc.parse("foo()").source
+      assert_equal "foo()", Oxc.parse("foo()", ast: false).source
+    end
+
+    test "hands the source to the tree it built" do
+      assert_equal "foo()", Oxc.parse("foo()").root.slice
+    end
+
     test "prints what it read" do
-      assert_equal "#<Oxc::ParseResult Program 0..5>", Oxc.parse("foo()").inspect
+      assert_equal "#<Oxc::ParseResult Program range=[0, 5]>", Oxc.parse("foo()").inspect
       assert_equal "#<Oxc::ParseResult>", Oxc.parse("foo()", ast: false).inspect
-      assert_equal "#<Oxc::ParseResult Program 0..5 symbols=0>", Oxc.parse("foo()", symbols: true).inspect
+      assert_equal "#<Oxc::ParseResult Program range=[0, 5] symbols=0>", Oxc.parse("foo()", symbols: true).inspect
     end
 
     test "refuses an ast type it cannot read" do

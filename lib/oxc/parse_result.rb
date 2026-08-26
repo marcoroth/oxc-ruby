@@ -4,17 +4,19 @@ module Oxc
   class ParseResult
     include Diagnosed
 
+    attr_reader :source #: String?
     attr_reader :program #: Hash[String, untyped]?
     attr_reader :module_record #: Hash[String, untyped]?
     attr_reader :symbols #: Hash[String, untyped]?
     attr_reader :comments #: Array[Oxc::Comment]
     attr_reader :diagnostics #: Array[Oxc::Diagnostic]
 
-    #: (String) -> Oxc::ParseResult
-    def self.from_json(payload)
+    #: (String, ?String?) -> Oxc::ParseResult
+    def self.from_json(payload, source = nil)
       parsed = JSON.parse(payload)
 
       new(
+        source: source,
         program: parsed["program"],
         module_record: parsed["module_record"],
         symbols: parsed["symbols"],
@@ -24,8 +26,9 @@ module Oxc
       )
     end
 
-    #: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
-    def initialize(comments:, diagnostics:, program: nil, module_record: nil, symbols: nil, panicked: false)
+    #: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?source: String?, ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
+    def initialize(comments:, diagnostics:, source: nil, program: nil, module_record: nil, symbols: nil, panicked: false)
+      @source = source
       @program = program.freeze
       @module_record = module_record.freeze
       @symbols = symbols.freeze
@@ -38,7 +41,7 @@ module Oxc
 
     #: () -> Oxc::Node?
     def root
-      program ? Node.new(program) : nil
+      program ? Node.new(program, nil, source) : nil
     end
 
     #: () -> Oxc::ParseResult
@@ -51,7 +54,7 @@ module Oxc
     #: () -> String
     def inspect
       parts = [] #: Array[String]
-      parts << "#{root&.type} #{root&.start}..#{root&.finish}" if program
+      parts << "#{root&.type} range=[#{root&.start}, #{root&.finish}]" if program
       parts << "module_record" if module_record
       parts << "symbols=#{symbols.fetch("declared").length}" if symbols
       parts << "comments=#{comments.length}" unless comments.empty?
