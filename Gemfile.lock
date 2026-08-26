@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    oxc (0.1.0)
+    oxc (0.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -170,7 +170,7 @@ CHECKSUMS
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   maxitest (7.1.1) sha256=f504c01714f83d8e4483be8cb1a6b02faa7e08a135202c0516c1e55fd11cd78d
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
-  oxc (0.1.0)
+  oxc (0.2.0)
   parallel (2.1.0) sha256=b35258865c2e31134c5ecb708beaaf6772adf9d5efae28e93e99260877b09356
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
