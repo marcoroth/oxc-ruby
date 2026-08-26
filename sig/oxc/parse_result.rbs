@@ -4,6 +4,8 @@ module Oxc
   class ParseResult
     include Diagnosed
 
+    attr_reader source: String?
+
     attr_reader program: Hash[String, untyped]?
 
     attr_reader module_record: Hash[String, untyped]?
@@ -14,11 +16,11 @@ module Oxc
 
     attr_reader diagnostics: Array[Oxc::Diagnostic]
 
-    # : (String) -> Oxc::ParseResult
-    def self.from_json: (String) -> Oxc::ParseResult
+    # : (String, ?String?) -> Oxc::ParseResult
+    def self.from_json: (String, ?String?) -> Oxc::ParseResult
 
-    # : (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
-    def initialize: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
+    # : (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?source: String?, ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
+    def initialize: (comments: Array[Oxc::Comment], diagnostics: Array[Oxc::Diagnostic], ?source: String?, ?program: Hash[String, untyped]?, ?module_record: Hash[String, untyped]?, ?symbols: Hash[String, untyped]?, ?panicked: bool) -> void
 
     # : () -> Oxc::Node?
     def root: () -> Oxc::Node?

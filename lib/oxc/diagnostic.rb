@@ -80,7 +80,7 @@ module Oxc
 
     #: () -> String
     def inspect
-      "#<#{self.class.name} #{start}..#{finish}#{" #{message.inspect}" if message}>"
+      "#<#{self.class.name} range=[#{start}, #{finish}]#{" #{message.inspect}" if message}>"
     end
   end
 end

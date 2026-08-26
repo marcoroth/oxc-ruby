@@ -213,11 +213,23 @@ Oxc.parse("let a; let a;", semantic_errors: true).errors.map(&:message)
 root = Oxc.parse(source).root
 
 root.type                 #=> "Program"
+root.keys                 #=> the ESTree fields this node carries
+root.fields               #=> those fields and their values, without the span
 root.child_nodes          #=> the nodes directly under it
 root.every("Identifier")  #=> every identifier in the file
 root.at(offset)           #=> the innermost node covering a byte offset
 root.each                 #=> an Enumerator over every node
 ```
+
+Inspecting a node shows every field it carries, so there is always something to reach for next.
+
+```
+#<Oxc::Node VariableDeclaration range=[0, 13] kind="let" declarations=[... 1 item]>
+#<Oxc::Node VariableDeclarator range=[4, 13] id=#<Oxc::Node Identifier> init=#<Oxc::Node Literal>>
+#<Oxc::Node Identifier range=[4, 9] name="count">
+```
+
+Every field is there, so what `inspect` prints and what `keys` answers never disagree. A field holding a node prints as that node's type, one holding a list prints how many it holds, and one holding nothing prints the `nil`, the `false` or the `[]` it holds.
 
 An ESTree field always wins over a method of the gem's own, since `name`, `attributes` and `children` are all real fields. `Identifier#name` is the identifier's name, `JSXElement#children` is what the element wraps, and `ImportDeclaration#attributes` is the import's `with` clause. The walker spells its own versions `underscored_type`, `to_h` and `child_nodes`, which no ESTree field can be called.
 
@@ -241,12 +253,58 @@ node.super_class       # superClass
 root.source_type       # sourceType
 ```
 
+Patterns take either name as well, binding what you asked for.
+
+```ruby
+node => { type_annotation: { type: }, readonly: }
+```
+
 `ancestors` is what a rewrite needs, since a reference sits inside the expression that has to be replaced.
 
 ```ruby
 reference = root.at(source.index("count +="))
-reference.ancestors.find { |node| node.type == "AssignmentExpression" }.slice(source)
+reference.ancestors.find { |node| node.type == "AssignmentExpression" }.slice
 #=> "count += 1"
+```
+
+A parse result keeps the source it read and hands it down to every node it builds, so `slice` answers with no argument at all.
+
+```ruby
+parsed = Oxc.parse(source)
+
+parsed.source
+#=> "let count = 0\nfunction bump() { count += 1; render(count) }"
+
+parsed.root.every("FunctionDeclaration").first.slice
+#=> "function bump() { count += 1; render(count) }"
+```
+
+It still takes one, for a node assembled by hand or read against a different string.
+
+```ruby
+node.slice(other_source)
+```
+
+Nodes pattern match, and nest, since a field holding a node comes back as one.
+
+```ruby
+node => { type: "VariableDeclarator", id: { name: }, init: { value: } }
+name   #=> "count"
+value  #=> 0
+
+root.select { |node| node in { type: "FunctionDeclaration", id: { name: /^handle/ } } }
+```
+
+`deconstruct_keys` is the whole protocol here. There is no `deconstruct`, since `each` yields every descendant and an array pattern over direct children would disagree with `to_a`.
+
+`to_h` and `to_json` answer the ESTree the node wraps, which is what a snapshot test or a dump to another tool wants.
+
+```ruby
+node.to_h
+#=> { "type" => "Identifier", "name" => "count", "start" => 4, "end" => 9 }
+
+node.to_json
+#=> "{\"type\":\"Identifier\",\"name\":\"count\",\"start\":4,\"end\":9}"
 ```
 
 `Oxc::Visitor` answers a node with the method named after its type, and walks through anything nothing answers.

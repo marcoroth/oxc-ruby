@@ -27,7 +27,7 @@ module Oxc
     end
 
     test "prints the span it covers" do
-      assert_equal "#<Oxc::Label 23..24>", label.inspect
+      assert_equal "#<Oxc::Label range=[23, 24]>", label.inspect
     end
 
     test "keeps what it read to itself" do
