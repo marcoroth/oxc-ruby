@@ -8,7 +8,7 @@ module Oxc
 
       return nil unless node
 
-      answer = "visit_#{node.name}"
+      answer = "visit_#{node.underscored_type}"
 
       respond_to?(answer) ? public_send(answer, node) : visit_children(node)
 
@@ -17,7 +17,7 @@ module Oxc
 
     #: (Oxc::Node) -> void
     def visit_children(node)
-      node.children.each { |child| visit(child) }
+      node.child_nodes.each { |child| visit(child) }
 
       nil
     end

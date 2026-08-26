@@ -12,9 +12,11 @@ module Oxc
 
     SCALARS: Integer
 
+    attr_reader parent: Oxc::Node?
+
     attr_reader attributes: Hash[String, untyped]
 
-    attr_reader parent: Oxc::Node?
+    public
 
     # : (Hash[String, untyped], ?Oxc::Node?) -> void
     def initialize: (Hash[String, untyped], ?Oxc::Node?) -> void
@@ -29,16 +31,19 @@ module Oxc
     def finish: () -> Integer
 
     # : () -> String
-    def name: () -> String
+    def underscored_type: () -> String
 
     # : (String) -> untyped
     def []: (String) -> untyped
+
+    # : () -> Hash[String, untyped]
+    def to_h: () -> Hash[String, untyped]
 
     # : (String) -> String?
     def slice: (String) -> String?
 
     # : () -> Array[Oxc::Node]
-    def children: () -> Array[Oxc::Node]
+    def child_nodes: () -> Array[Oxc::Node]
 
     # : () { (Oxc::Node) -> void } -> void
     # : () -> Enumerator[Oxc::Node, void]
@@ -67,6 +72,9 @@ module Oxc
     def respond_to_missing?: (Symbol, ?bool) -> bool
 
     private
+
+    # : (String) -> String?
+    def field_for: (String) -> String?
 
     # : (untyped) -> untyped
     def wrap: (untyped) -> untyped
