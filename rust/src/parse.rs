@@ -56,7 +56,7 @@ pub fn parse_source(source: &str, options: &ParseOptions) -> Result<ParsePayload
     symbols,
     comments,
     errors: Diagnostic::from_diagnostics(&filename, source, diagnostics),
-    panicked: parsed.panicked,
+    panicked: parsed.fatal_error,
   })
 }
 
