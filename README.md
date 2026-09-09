@@ -27,6 +27,14 @@ bundle add oxc
 
 Anywhere a precompiled gem is not published, the gem builds from source and needs the [Rust toolchain](https://rustup.rs) at 1.96 or newer.
 
+### Versioning
+
+The gem carries the version of oxc it packages. Gem v0.149.0 bundles oxc v0.149.0, and `Oxc.oxc_version` reports what a given build was compiled against.
+
+So the version tracks oxc, not the Ruby API here. A minor bump is a minor oxc release, and says nothing about whether this gem's own API moved. Pin on the oxc version you want.
+
+If the gem needs releasing again for the same oxc version, that release adds a fourth digit, as in v0.149.0.1.
+
 ### Usage
 
 #### Minifying
