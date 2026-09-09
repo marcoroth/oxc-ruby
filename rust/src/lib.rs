@@ -200,7 +200,7 @@ fn minify_source(source: &str, options: &MinifyOptions) -> Result<MinifyPayload,
     map,
     legal_comments,
     errors: Diagnostic::from_diagnostics(&filename, source, parsed.diagnostics),
-    panicked: parsed.panicked,
+    panicked: parsed.fatal_error,
   })
 }
 
