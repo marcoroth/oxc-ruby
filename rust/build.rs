@@ -28,7 +28,29 @@ fn main() {
     PathBuf::from(&crate_dir).join("cbindgen.toml").display()
   );
 
+  let version_rb_path = PathBuf::from(&crate_dir).join("../lib/oxc/version.rb");
+
+  println!("cargo:rerun-if-changed={}", version_rb_path.display());
+
   println!("cargo:rustc-env=OXC_VERSION={}", locked_version(&lock_path, "oxc"));
+
+  println!("cargo:rustc-env=GEM_VERSION={}", gem_version(&version_rb_path));
+}
+
+fn gem_version(version_rb_path: &PathBuf) -> String {
+  let Ok(source) = fs::read_to_string(version_rb_path) else {
+    return "unknown".to_string();
+  };
+
+  for line in source.lines() {
+    let Some(rest) = line.trim().strip_prefix("VERSION = ") else {
+      continue;
+    };
+
+    return rest.trim().trim_matches('"').to_string();
+  }
+
+  "unknown".to_string()
 }
 
 fn locked_version(lock_path: &PathBuf, package: &str) -> String {

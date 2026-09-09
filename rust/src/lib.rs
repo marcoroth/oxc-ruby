@@ -37,7 +37,7 @@ use crate::result::{MinifyPayload, TransformPayload};
 use crate::source_type::source_type_for;
 use crate::transform::Compiler;
 
-pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const VERSION: &str = env!("GEM_VERSION");
 pub const OXC_VERSION: &str = env!("OXC_VERSION");
 
 #[repr(C)]
