@@ -148,8 +148,13 @@ jobs:
           fi
 
       - name: Build and test against the new version
+        id: verify
         if: steps.upstream.outputs.needed == 'true' && steps.existing_pr.outputs.exists == 'false'
-        run: bundle exec rake test
+        continue-on-error: true
+        run: |
+          set -o pipefail
+
+          bundle exec rake test 2>&1 | tee "${RUNNER_TEMP}/verify.log"
 
       - name: Create pull request
         if: steps.upstream.outputs.needed == 'true' && steps.existing_pr.outputs.exists == 'false'
@@ -160,6 +165,7 @@ jobs:
           UPSTREAM_VERSION: ${{ steps.upstream.outputs.upstream_version }}
           CURRENT_GEM_VERSION: ${{ steps.upstream.outputs.current_gem_version }}
           GEM_VERSION: ${{ steps.upstream.outputs.gem_version }}
+          VERIFIED: ${{ steps.verify.outcome }}
         run: |
           set -euo pipefail
 
@@ -176,7 +182,39 @@ jobs:
 
           git push --force -u origin "${branch}"
 
-          gh pr create \
-            --title "Bump oxc to ${UPSTREAM_VERSION}" \
-            --body "$(printf "Update the embedded oxc dependency from %s to [%s](https://github.com/oxc-project/oxc/releases/tag/crates_v%s).\n\nThe gem version tracks the oxc version it packages, so this also bumps the gem from %s to **%s**.\n\nThe gem was built and tested against the new version before this PR was opened. Merging this does not publish anything, cut a \`v%s\` release to push the gems.\n\nThis PR was created automatically by the upstream workflow." \
-              "${CURRENT_VERSION}" "${UPSTREAM_VERSION}" "${UPSTREAM_VERSION}" "${CURRENT_GEM_VERSION}" "${GEM_VERSION}" "${GEM_VERSION}")"
+          body="${RUNNER_TEMP}/pr-body.md"
+
+          {
+            printf 'Update the embedded oxc dependency from %s to [%s](https://github.com/oxc-project/oxc/releases/tag/crates_v%s).\n\n' \
+              "${CURRENT_VERSION}" "${UPSTREAM_VERSION}" "${UPSTREAM_VERSION}"
+            printf 'The gem version tracks the oxc version it packages, so this also bumps the gem from %s to **%s**.\n\n' \
+              "${CURRENT_GEM_VERSION}" "${GEM_VERSION}"
+          } > "${body}"
+
+          if [[ "${VERIFIED}" == "success" ]]; then
+            printf 'The gem was built and tested against the new version before this PR was opened. Merging this does not publish anything, cut a `v%s` release to push the gems.\n' \
+              "${GEM_VERSION}" >> "${body}"
+          else
+            {
+              printf '> [!WARNING]\n'
+              printf '> The gem did not build or test cleanly against this version, so this PR is a draft.\n'
+              printf '> Something upstream changed in a way this gem has to be adapted to.\n\n'
+              printf '<details><summary>Verification output</summary>\n\n```\n'
+              sed -E 's/\x1b\[[0-9;]*[A-Za-z]//g' "${RUNNER_TEMP}/verify.log" | tail -c 8000
+              printf '\n```\n\n</details>\n'
+            } >> "${body}"
+          fi
+
+          printf '\nThis PR was created automatically by the upstream workflow.\n' >> "${body}"
+
+          if [[ "${VERIFIED}" == "success" ]]; then
+            gh pr create --title "Bump oxc to ${UPSTREAM_VERSION}" --body-file "${body}"
+          else
+            gh pr create --draft --title "Bump oxc to ${UPSTREAM_VERSION}" --body-file "${body}"
+          fi
+
+      - name: Report the verification result
+        if: steps.upstream.outputs.needed == 'true' && steps.existing_pr.outputs.exists == 'false' && steps.verify.outcome == 'failure'
+        run: |
+          echo "::error::The gem did not build or test cleanly against the new version. A draft PR was opened to fix it in."
+          exit 1
