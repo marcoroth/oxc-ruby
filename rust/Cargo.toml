@@ -15,7 +15,7 @@ path = "src/lib.rs"
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
-oxc = { version = "=0.150.0", features = ["full", "serialize"] }
+oxc = { version = "=0.151.0", features = ["full", "serialize"] }
 oxc_sourcemap = "8"
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["raw_value"] }

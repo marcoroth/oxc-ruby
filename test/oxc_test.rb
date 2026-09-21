@@ -4,7 +4,7 @@ require "test_helper"
 
 class OxcTest < Minitest::Spec
   test "has a version number" do
-    assert_equal "0.150.0", Oxc::VERSION
+    assert_equal "0.151.0", Oxc::VERSION
   end
 
   test "the native library was built from the version the gem was" do
@@ -12,7 +12,7 @@ class OxcTest < Minitest::Spec
   end
 
   test "reports the version of oxc it was compiled against" do
-    assert_equal "0.150.0", Oxc.oxc_version
+    assert_equal "0.151.0", Oxc.oxc_version
   end
 
   test "the version it reports is the one Cargo.lock pins" do
