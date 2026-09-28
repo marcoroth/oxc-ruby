@@ -47,6 +47,34 @@ fn parse_leaves_the_ast_out_when_it_was_only_asked_to_read() {
 }
 
 #[test]
+fn parse_treats_html_comments_as_line_comments() {
+  let (code, answer) = parse("<!-- hi\nfoo()", r#"{"ast":false}"#);
+
+  assert_eq!(code, OxcErrorCode::None);
+
+  let payload: serde_json::Value = serde_json::from_str(&answer).unwrap();
+  let comments = payload["comments"].as_array().unwrap();
+
+  assert_eq!(comments.len(), 1);
+  assert_eq!(comments[0]["type"], "Line");
+  assert_eq!(comments[0]["value"], " hi");
+}
+
+#[test]
+fn parse_treats_html_close_comments_as_line_comments_in_script_mode() {
+  let (code, answer) = parse("-->\nfoo()", r#"{"ast":false,"source_type":"script"}"#);
+
+  assert_eq!(code, OxcErrorCode::None);
+
+  let payload: serde_json::Value = serde_json::from_str(&answer).unwrap();
+  let comments = payload["comments"].as_array().unwrap();
+
+  assert_eq!(comments.len(), 1);
+  assert_eq!(comments[0]["type"], "Line");
+  assert_eq!(comments[0]["value"], "");
+}
+
+#[test]
 fn parse_answers_what_it_could_not_read_inside_the_result() {
   let (code, answer) = parse("const x = ;", r#"{"ast":false}"#);
 

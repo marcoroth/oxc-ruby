@@ -68,6 +68,7 @@ fn collect_comments(source: &str, program: &oxc::ast::ast::Program<'_>, include_
       kind: match comment.kind {
         CommentKind::Line => "Line",
         CommentKind::SingleLineBlock | CommentKind::MultiLineBlock => "Block",
+        CommentKind::HtmlOpen | CommentKind::HtmlClose => "Line",
       },
       value: comment.content_span().source_text(source).to_string(),
       start: comment.span.start,
