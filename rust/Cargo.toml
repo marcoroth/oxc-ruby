@@ -16,7 +16,7 @@ crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
 oxc = { version = "=0.152.0", features = ["full", "serialize"] }
-oxc_sourcemap = "8"
+oxc_sourcemap = "9"
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["raw_value"] }
 
