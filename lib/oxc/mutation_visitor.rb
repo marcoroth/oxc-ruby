@@ -79,11 +79,11 @@ module Oxc
 
     #: (String, Hash[Symbol, untyped]) -> String
     def verified(rewritten, options)
-      answer = Oxc.parse(rewritten, **options, ast: false)
+      reparsed = Oxc.parse(rewritten, **options, ast: false)
 
-      return rewritten unless answer.errors?
+      return rewritten unless reparsed.errors?
 
-      raise Invalid, "what was rewritten no longer reads as JavaScript: #{answer.errors.first&.message}"
+      raise Invalid, "what was rewritten no longer reads as JavaScript: #{reparsed.errors.first&.message}"
     end
 
     #: (Oxc::Node) -> bool

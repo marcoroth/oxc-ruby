@@ -8,9 +8,9 @@ module Oxc
 
       return nil unless node
 
-      answer = "visit_#{node.underscored_type}"
+      method_name = "visit_#{node.underscored_type}"
 
-      respond_to?(answer) ? public_send(answer, node) : visit_children(node)
+      respond_to?(method_name) ? public_send(method_name, node) : visit_children(node)
 
       nil
     end
