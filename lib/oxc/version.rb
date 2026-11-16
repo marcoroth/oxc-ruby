@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Oxc
-  VERSION = "0.158.0"
+  VERSION = "0.159.0"
 end
