@@ -34,7 +34,7 @@ impl Diagnostic {
       return Vec::new();
     }
 
-    let source = Arc::new(NamedSource::new(filename, source_text.to_string()));
+    let source = Arc::new(NamedSource::new(filename.to_string(), source_text.to_string()));
 
     diagnostics
       .into_iter()
